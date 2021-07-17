@@ -15,7 +15,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5434/postgres
     hikari:
       minimumIdle: 2
       maximumPoolSize: 20

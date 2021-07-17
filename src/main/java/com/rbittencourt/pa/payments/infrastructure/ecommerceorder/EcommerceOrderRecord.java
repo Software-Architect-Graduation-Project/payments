@@ -1,8 +1,8 @@
-package com.rbittencourt.pa.payments.infrastructure.record;
+package com.rbittencourt.pa.payments.infrastructure.ecommerceorder;
 
 import java.time.LocalDateTime;
 
-public class OrderRecord {
+public class EcommerceOrderRecord {
 
     private long orderId;
 
@@ -10,7 +10,7 @@ public class OrderRecord {
 
     private LocalDateTime updateTime;
 
-    public OrderRecord(long orderId, String newStatus) {
+    public EcommerceOrderRecord(long orderId, String newStatus) {
         this.orderId = orderId;
         this.newStatus = newStatus;
         this.updateTime = LocalDateTime.now();

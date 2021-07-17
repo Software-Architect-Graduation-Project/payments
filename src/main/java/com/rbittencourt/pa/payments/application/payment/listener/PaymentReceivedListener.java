@@ -1,7 +1,5 @@
 package com.rbittencourt.pa.payments.application.payment.listener;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbittencourt.pa.payments.application.payment.PaymentProcessor;
 import com.rbittencourt.pa.payments.infrastructure.payment.Payment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +10,10 @@ import org.springframework.stereotype.Component;
 public class PaymentReceivedListener {
 
     @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
     private PaymentProcessor paymentProcessor;
 
-    @KafkaListener(topics = "payment_received", groupId = "group")
-    public void receiveNewPayment(String message) throws JsonProcessingException {
-        Payment payment = objectMapper.readValue(message, Payment.class);
+    @KafkaListener(topics = "payment_received", containerFactory = "paymentKafkaListenerContainerFactory")
+    public void receiveNewPayment(Payment payment) {
         paymentProcessor.process(payment);
     }
 

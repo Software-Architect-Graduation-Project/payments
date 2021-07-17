@@ -1,10 +1,8 @@
 package com.rbittencourt.pa.payments.application.payment;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rbittencourt.pa.payments.infrastructure.payment.Payment;
 import com.rbittencourt.pa.payments.infrastructure.payment.PaymentRepository;
-import com.rbittencourt.pa.payments.infrastructure.record.OrderRecord;
+import com.rbittencourt.pa.payments.infrastructure.ecommerceorder.EcommerceOrderRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +16,11 @@ public class PaymentProcessor {
     private PaymentRepository paymentRepository;
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, EcommerceOrderRecord> kafkaTemplate;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final Logger logger = LoggerFactory.getLogger(PaymentProcessor.class);
 
-    private Logger logger = LoggerFactory.getLogger(PaymentProcessor.class);
-
-    public void process(Payment payment) throws JsonProcessingException {
+    public void process(Payment payment) {
         sendPaymentProcessingStartedEvent(payment);
 
         paymentRepository.save(payment);
@@ -35,18 +30,14 @@ public class PaymentProcessor {
         logger.info("Payment from order " + payment.getOrderId() + " was processed");
     }
 
-    private void sendPaymentProcessingStartedEvent(Payment payment) throws JsonProcessingException {
-        OrderRecord orderRecord = new OrderRecord(payment.getOrderId(), "PROCESSING_PAYMENT");
-        String payload = objectMapper.writeValueAsString(orderRecord);
-
-        kafkaTemplate.send("payment_processing_started", payload);
+    private void sendPaymentProcessingStartedEvent(Payment payment) {
+        EcommerceOrderRecord ecommerceOrderRecord = new EcommerceOrderRecord(payment.getOrderId(), "PROCESSING_PAYMENT");
+        kafkaTemplate.send("payment_processing_started", ecommerceOrderRecord);
     }
 
-    private void sendPaymentProcessedEvent(Payment payment) throws JsonProcessingException {
-        OrderRecord orderRecord = new OrderRecord(payment.getOrderId(), "PAYMENT_PROCESSED");
-        String payload = objectMapper.writeValueAsString(orderRecord);
-
-        kafkaTemplate.send("payment_processed", payload);
+    private void sendPaymentProcessedEvent(Payment payment) {
+        EcommerceOrderRecord ecommerceOrderRecord = new EcommerceOrderRecord(payment.getOrderId(), "PAYMENT_PROCESSED");
+        kafkaTemplate.send("payment_processed", ecommerceOrderRecord);
     }
 
 }

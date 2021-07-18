@@ -9,6 +9,7 @@ import javax.persistence.Id;
 
 import java.time.LocalDateTime;
 
+import static java.time.LocalDateTime.now;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity(name = "payment")
@@ -33,7 +34,14 @@ public class Payment {
     private LocalDateTime createdOn;
 
     public Payment() {
-        createdOn = LocalDateTime.now();
+        this.createdOn = now();
+    }
+
+    public Payment(String clientId, long orderId, String paymentPlan) {
+        this.clientId = clientId;
+        this.orderId = orderId;
+        this.paymentPlan = paymentPlan;
+        this.createdOn = now();
     }
 
     public long getId() {

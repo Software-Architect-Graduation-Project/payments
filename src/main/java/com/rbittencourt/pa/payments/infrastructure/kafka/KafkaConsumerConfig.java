@@ -1,6 +1,6 @@
 package com.rbittencourt.pa.payments.infrastructure.kafka;
 
-import com.rbittencourt.pa.payments.infrastructure.payment.Payment;
+import com.rbittencourt.pa.payments.infrastructure.ecommerceorder.EcommerceOrder;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,11 +24,11 @@ public class KafkaConsumerConfig {
     private String bootstrapAddress;
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Payment> paymentKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, EcommerceOrder> paymentKafkaListenerContainerFactory() {
         var consumerFactory = new DefaultKafkaConsumerFactory<>(
-            props(), new StringDeserializer(), new JsonDeserializer<>(Payment.class, false)
+            props(), new StringDeserializer(), new JsonDeserializer<>(EcommerceOrder.class, false)
         );
-        var factory = new ConcurrentKafkaListenerContainerFactory<String, Payment>();
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, EcommerceOrder>();
 
         factory.setConsumerFactory(consumerFactory);
 
@@ -38,7 +38,7 @@ public class KafkaConsumerConfig {
     private Map<String, Object> props() {
         Map<String, Object> props = new HashMap<>();
         props.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        props.put(GROUP_ID_CONFIG, "group");
+        props.put(GROUP_ID_CONFIG, "group-payments");
 
         return props;
     }

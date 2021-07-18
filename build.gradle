@@ -5,8 +5,8 @@ plugins {
 }
 
 group = 'com.rbittencourt.pa'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '16'
+version = '1.0.0'
+sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()

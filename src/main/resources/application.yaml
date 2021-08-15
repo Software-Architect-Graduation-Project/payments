@@ -15,10 +15,10 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
-    url: jdbc:postgresql://localhost:5434/postgres
+    url: ${LOGISTICS_POSTGRES_HOST}
     hikari:
       minimumIdle: 2
       maximumPoolSize: 20
 
 kafka:
-  bootstrapAddress: localhost:9092
+  bootstrapAddress: ${KAFKA_BOOTSTRAP_ADDRESS}

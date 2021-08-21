@@ -19,6 +19,8 @@ spring:
     hikari:
       minimumIdle: 2
       maximumPoolSize: 20
+  flyway:
+    baseline-on-migrate: true
 
 kafka:
   bootstrapAddress: ${KAFKA_BOOTSTRAP_ADDRESS}
